@@ -1,12 +1,13 @@
 // add the events
 
-const staticCacheName = 'site-static-v2';
-const dynamicCacheName = 'site-dynamic-v1';
+const staticCacheName = 'site-static-v3';
+const dynamicCacheName = 'site-dynamic-v2';
 const assets = [
   '/',
   '/index.html',
   '/js/app.js',
   '/js/ui.js',
+  '/js/db.js',
   '/js/materialize.min.js',
   '/css/styles.css',
   '/css/materialize.min.css',
@@ -46,6 +47,8 @@ self.addEventListener("activate",(evt)=>{
 //fetch 
 self.addEventListener("fetch",(evt)=>{
    // console.log(evt);
+
+   if(evt.request.url.indexOf('firestore.googleapis.com')===-1){
     evt.respondWith(
         caches.match(evt.request).then(cachesRes=>{
             return cachesRes || fetch(evt.request).then(fetchRes=>{
@@ -56,4 +59,6 @@ self.addEventListener("fetch",(evt)=>{
             }).catch(()=>caches.match('/pages/fallback.html'))
         })
     )
+   }
+    
 })
